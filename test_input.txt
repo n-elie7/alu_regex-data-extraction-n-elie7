@@ -1,0 +1,190 @@
+CUSTOMER SERVICE TRANSCRIPT - CASE #2024-08-15-A4732
+=======================================================
+
+Date: January 15, 2025
+Time: 14:30:45
+Agent: Sarah Johnson (sarah.johnson@techsupport.com)
+Customer: Michael Chen
+
+---
+
+[14:30] Agent connects to chat
+
+AGENT: Hello! Thank you for contacting TechSupport Inc. My name is Sarah and I'll be assisting you today. 
+Could you please provide your registered email address?
+
+CUSTOMER: Hi Sarah! Yes, my email is michael.chen@gmail.com. I've been having issues with my account.
+
+AGENT: Thank you, Michael. I see your account here. Before we proceed, I need to verify some information. 
+Can you confirm the phone number on file? It should be (555) 123-4567.
+
+CUSTOMER: Actually, I updated it recently. My new number is 555-987-6543. I also have a work number: 
+(212) 555-0199. You can reach me at either one.
+
+AGENT: Perfect, I've noted that. I see there was a transaction on your account for $249.99 on January 10th. 
+Is this the issue you're calling about?
+
+CUSTOMER: Yes! That charge was supposed to be $24.99, not $249.99! I also noticed another charge for 
+$1,234.56 that I didn't authorize. This is concerning.
+
+AGENT: I completely understand your concern. Let me pull up those transactions. I see the charge was 
+processed at 9:45 AM on your card ending in 4532. Was that your Visa card?
+
+CUSTOMER: Yes, that's my card: 4532-1234-5678-9012. But I never approved the $1,234.56 charge!
+
+AGENT: Let me investigate this. According to our records, the transaction originated from our website 
+at https://www.techsupport.com/checkout and was completed at 09:45:33. The confirmation was sent to 
+your email.
+
+CUSTOMER: I did visit the website, but I went to the support page at https://support.techsupport.com/help 
+and then to https://techsupport.com/products/premium-plan. I never checked out for that amount!
+
+AGENT: I see the discrepancy. Let me check our security logs. Can you tell me what device you were using?
+
+CUSTOMER: I was on my laptop. I also checked my account on my phone later at 2:30 PM using the mobile 
+site at https://m.techsupport.com.
+
+---
+
+SECURITY LOG ENTRIES:
+[09:45:33] Login from IP: 192.168.1.105
+[09:46:12] Page visit: https://www.techsupport.com/products/premium-plan
+[09:47:01] Cart updated: Item added ($249.99)
+[09:47:45] Checkout initiated
+[09:48:22] Payment processed: $249.99 - Card ending 4532
+[14:30:00] Customer service chat initiated
+[14:35:17] Refund request processed: $225.00 (partial)
+
+---
+
+AGENT: Michael, I've reviewed everything. Here's what I found: The $249.99 charge appears to be legitimate 
+from your session, but I can see why you're confused. The $1,234.56 charge doesn't exist in our system - 
+it might be from another merchant.
+
+CUSTOMER: Wait, let me check my bank statement... Oh! You're right. The $1,234.56 was from 
+OnlineRetail.com, not you guys. My mistake!
+
+AGENT: No problem! These things happen. However, I do see that you were charged $249.99 instead of the 
+$24.99 you intended. I'm processing a partial refund of $225.00 right now. You should see it in 3-5 
+business days at your email michael.chen@gmail.com.
+
+CUSTOMER: Thank you so much! That's a relief. Can I get a confirmation email?
+
+AGENT: Absolutely! I'm sending it to michael.chen@gmail.com right now. You'll also receive a text at 
+555-987-6543. Is there anything else I can help you with today?
+
+CUSTOMER: Actually yes - I tried to share my account details with my colleague at work. Her email is 
+jessica.williams@corporate-solutions.co.uk. Can you add her as an authorized user?
+
+AGENT: I can help with that! I'll need some additional information. What's her phone number?
+
+CUSTOMER: It's +44 20 7123 4567. She's based in London.
+
+AGENT: Perfect. I've sent an invitation to jessica.williams@corporate-solutions.co.uk. She should 
+receive it within the hour.
+
+---
+
+ADDITIONAL CONTEXT FROM CHAT:
+
+The customer also mentioned following TechSupport on social media. They post updates using #TechSupport 
+and #CustomerFirst hashtags. You can find them at https://twitter.com/techsupport or on their blog at 
+https://blog.techsupport.com/updates/2025/january.
+
+Customer requested documentation be sent to michael.chen@gmail.com and CC'd to support@techsupport.com.
+
+---
+
+INVALID/SUSPICIOUS ENTRIES DETECTED IN SYSTEM LOGS:
+
+[WARNING] Attempted email injection: admin@techsupport.com; DROP TABLE users; --
+[WARNING] Malformed URL access attempt: https://techsupport.com/<script>alert('XSS')</script>
+[WARNING] Invalid phone format: 123-ABC-DEFG
+[WARNING] Suspicious card number: 0000-0000-0000-0000
+[WARNING] Malformed email: user@.com
+[WARNING] Invalid time stamp: 25:99:99
+[WARNING] Currency injection attempt: $<script>document.cookie</script>
+[WARNING] HTML injection: <img src=x onerror=alert('XSS')>
+[WARNING] Fake hashtag: #<script>alert(1)</script>
+[WARNING] Bad URL: javascript:alert('XSS')
+[WARNING] Phone with SQL: 555-1234; DELETE FROM accounts WHERE 1=1; --
+
+---
+
+SOCIAL MEDIA MENTIONS:
+
+Check out our new pricing! Premium plan now only $49.99/month instead of $99.99! #TechSupport #Deals 
+#SaveMoney #Tech2025
+
+Customer feedback: "Called support at 3:45 PM, issue resolved by 4:15 PM. Amazing service! 
+Email: satisfied.customer@email-provider.com Phone: (800) 555-0123" #HappyCustomer
+
+Visit our partners:
+- DataSecure Inc: https://www.datasecure.com/solutions
+- CloudHost Pro: https://cloudhost.pro/pricing
+- DevTools Express: https://dev-tools.express.io/api/docs
+
+---
+
+PAYMENT DETAILS FROM BACKEND:
+
+Transaction #1: $49.99 (approved)
+Transaction #2: $149.50 (approved) 
+Transaction #3: $1,999.00 (pending verification)
+Transaction #4: $0.99 (approved - micro-transaction)
+Transaction #5: $12,345.67 (flagged for review)
+
+Customer cards on file:
+- Visa: 4532-8765-1234-5678 (expires 12/26)
+- Mastercard: 5412-7534-8621-9753 (expires 09/27)
+- Amex: 3782-822463-10005 (expires 03/25)
+
+---
+
+CONTACT INFORMATION SUMMARY:
+
+Primary Contact: michael.chen@gmail.com | (555) 987-6543
+Secondary Contact: m.chen@work-email.com | 212-555-0199
+Emergency Contact: family.member@email.net | 555.123.4567
+
+Support Team:
+- Sarah Johnson: sarah.johnson@techsupport.com | (555) 100-2001
+- John Davis: john.davis@techsupport.com | 555-100-2002
+- Emily Rodriguez: e.rodriguez@techsupport.com | (555) 100-2003
+
+Website: https://www.techsupport.com
+Support Portal: https://support.techsupport.com
+API Documentation: https://api.techsupport.com/v2/docs
+Mobile App: https://app.techsupport.com/download
+
+Schedule: Monday-Friday 9:00 AM to 5:00 PM, Saturday 10:00 AM to 2:00 PM
+
+---
+
+ADDITIONAL TEST CASES:
+
+Valid patterns:
+- Time: Meeting at 09:30 tomorrow, followed by lunch at 12:00 PM and dinner at 7:45 PM
+- URL: Check the docs at https://developer.mozilla.org/en-US/docs/Web/JavaScript
+- Hashtag: #Python3 #DataScience #MachineLearning #AI2025
+- Currency: Budget items: $5.00, $125.99, $2,500.00, $99.95
+- Email: contact-us@company-name.org, info@sub.domain.com
+- Phone: International: +1-555-123-4567, +44-20-7123-4567
+
+Invalid patterns that should be caught:
+- Bad email: @nodomain.com, user@, user@domain, user@@domain.com
+- Bad URL: htp://wrong.com, https:/missing-slash.com, www.nodomain
+- Bad phone: 1234567890123456789 (too long), 123 (too short), 555-CALL-NOW
+- Bad card: 1234 (too short), 1234-5678-9012-345X (letter in number)
+- Bad time: 25:00, 12:60 PM, 99:99
+- Bad currency: $, $$50.99, $50.999 (too many decimals)
+- Bad hashtag: # (empty), #1234 (numbers only)
+- Injection: <script>alert('xss')</script>, '; DROP TABLE users; --, ../../../etc/passwd
+
+---
+
+END OF TRANSCRIPT
+Case Status: RESOLVED
+Resolution Time: 45 minutes
+Customer Satisfaction: 5/5 stars
+Follow-up Required: No
