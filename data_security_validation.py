@@ -395,3 +395,47 @@ class SecureDataValidationExtractor:
 
         return True
 
+    def validate_credit_card(self, card_number: str) -> bool:
+        """
+        This method validates credit card using Luhn algorithm.
+
+        Args:
+            card: Credit card number to validate
+
+        Returns:
+            True if card passes Luhn algorithm check
+        """
+
+        # first remove formatting issues like spaces and dashes
+        card_digits = re.sub(r"\D", "", card_number)
+
+        # it checks length 13-19 card_digits for valid cards
+        # based on type of card but we must be inclusive for reliable system 
+        if len(card_digits) < 13 or len(card_digits) > 19:
+            return False
+
+        # Reject fake numbers
+        if card_digits == "0" * len(card_digits):
+            return False
+
+        # Luhn Algorithm implementation
+        def luhn_check(card_number):
+            """Implementation of Luhn algorithm for card validation."""
+            if not card_number.isdigit():
+                return False
+            
+            total = 0
+            reverse_card_digits = card_number[::-1]
+
+            for index, digit in enumerate(reverse_card_digits):
+                number = int(digit)
+                if index % 2 == 1:
+                    number *= 2
+                    if number > 9:
+                        number -= 9
+                total += number
+
+            return total % 10 == 0
+
+        return luhn_check(card_digits)
+
