@@ -241,3 +241,33 @@ class SecureDataValidationExtractor:
             return False
 
         return True
+
+    def validate_phone_number(self, phone: str) -> bool:
+        """
+        Additional validation for phone numbers.
+
+        Args:
+            phone: Phone number to validate
+
+        Returns:
+            True if phone number is valid
+        """
+
+        # This checks if phone is not empty
+        if not phone:
+            return False
+
+        # removed formatting to count digits only
+        digits_only = re.sub(r"\D", "", phone)
+
+        # Check digit count 7-15 digits is reasonable for most phone numbers
+        # across the globe minimum digits are 7-8 and maximum is 15
+        # source is google on the internet 
+        if len(digits_only) < 7 or len(digits_only) > 15:
+            return False
+
+        # This check for malicious patterns
+        if not self.is_safe_input(phone):
+            return False
+
+        return True
