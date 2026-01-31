@@ -210,3 +210,34 @@ class SecureDataValidationExtractor:
             return False
 
         return True
+
+    def validate_url(self, url: str) -> bool:
+        """
+        Additional validation for URLs beyond regex.
+
+        Args:
+            url: URL to validate
+
+        Returns:
+            True if URL passes all validation checks
+        """
+
+        # here i checked if url is available 
+        # or not longer than 2048.
+        # reasonable URL length limit
+        if not url or len(url) > 2048:
+            return False
+
+        # Block malicious protocols
+        # that can cause security issues
+        # not all of them included but common ones 
+        malicious_protocols = ["javascript:", "data:", "file:", "vbscript:"]
+        if any(url.lower().startswith(protocol) for protocol in malicious_protocols):
+            return False
+
+        # Check for malicious attempts in URL
+        # check the implementation of is_safe_input method above
+        if not self.is_safe_input(url):
+            return False
+
+        return True
