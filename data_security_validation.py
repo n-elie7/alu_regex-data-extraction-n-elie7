@@ -271,3 +271,127 @@ class SecureDataValidationExtractor:
             return False
 
         return True
+
+    def validate_time_format(self, time_str: str) -> bool:
+        """
+        This function validates time format and values.
+
+        Args:
+            time_str: Time string to validate
+
+        Returns:
+            True if time format is valid
+        """
+
+        # This checks if time_str if available
+        if not time_str:
+            return False
+        
+        # Extract hours and minutes
+        time_format_match = re.match(r"(\d{1,2}):(\d{2})(?:\s?(AM|PM|am|pm))?", time_str)
+        if not time_format_match:
+            return False
+
+        hours, minutes, period = time_format_match.groups()
+        # here we performed type casting to perform operations on it.
+        hours, minutes = int(hours), int(minutes)
+
+        # Validate minutes
+        if minutes > 59:
+            return False
+
+        # Validate hours based on format
+        if period:  # This means its 12-hour format
+            if hours < 1 or hours > 12:
+                return False
+        else:  # means its 24-hour format
+            if hours > 23:
+                return False
+
+        return True
+
+    def validate_html_tag(self, tag: str) -> bool:
+        """
+        This method validates HTML tag existence.
+
+        Args:
+            tag: HTML tag to validate
+
+        Returns:
+            True if tag appears safe (basic validation)
+        """
+
+        # This check for malicious inputs
+        if not self.is_safe_input(tag):
+            return False
+
+        # Check for dangerous tags
+        dangerous_tags = ["script", "iframe", "object", "embed", "link"]
+        tag_name = re.match(r"<([a-zA-Z][a-zA-Z0-9]*)", tag)
+        if tag_name and tag_name.group(1).lower() in dangerous_tags:
+            return False
+
+        return True
+
+    def validate_hashtag(self, hashtag: str) -> bool:
+        """
+        This method validate hashtag format.
+
+        Args:
+            hashtag: Hashtag to validate
+
+        Returns:
+            True if hashtag is valid
+        """
+
+        # This will make sure that input is not empty
+        if not hashtag:
+            return False
+
+        # Must have at least one letter (not just numbers)
+        if not re.search(r"[a-zA-Z]", hashtag):
+            return False
+
+        # This will check for malicious patterns in the input
+        if not self.is_safe_input(hashtag):
+            return False
+
+        # reasonable length check not longest ones
+        if len(hashtag) > 140:
+            return False
+
+        return True
+
+    def validate_amount_currency(self, amount: str) -> bool:
+        """
+        This method validates amount currency format.
+
+        Args:
+            amount: Currency amount to validate
+
+        Returns:
+            True if amount is valid
+        """
+
+        # made sure if amount input is there
+        if not amount:
+            return False
+        
+        # Remove $ and commas to get number
+        clean_amount = amount.replace("$", "").replace(",", "")
+
+        try:
+            value = float(clean_amount)
+            # reasonable range check
+            # Hhh to prevent imaginable amount or negative ones
+            if value < 0 or value > 999999999.99:
+                return False
+        except ValueError:
+            return False
+
+        # Check for malicious inputs
+        if not self.is_safe_input(amount):
+            return False
+
+        return True
+
