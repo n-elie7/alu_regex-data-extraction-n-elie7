@@ -163,3 +163,50 @@ class SecureDataValidationExtractor:
                 return f"{username}@{parts[1]}"
         else:
             return text
+        
+    def validate_email(self, email: str) -> bool:
+        """
+        Additional validation for email addresses beyond regex.
+
+        Args:
+            email: Email address to validate
+
+        Returns:
+            True if email passes all validation checks
+        """
+
+        # here i checked if email is available 
+        # or not longer than 254 based on rules.
+        if not email or len(email) > 254:
+            return False
+
+        # Check for malicious patterns security layer
+        # for checking SQL injections, XSS, and Path traversal.
+        if not self.is_safe_input(email):
+            return False
+
+        # Split and validate parts
+        # to avoid complexity to validate the whole thing at once.
+        parts = email.split("@")
+        if len(parts) != 2:
+            return False
+
+        username, domain = parts
+
+        # Username validation
+        if len(username) == 0 or len(username) > 64:
+            return False
+        if username.startswith(".") or username.endswith("."):
+            return False
+        if ".." in username:
+            return False
+
+        # Domain validation
+        if len(domain) == 0 or len(domain) > 255:
+            return False
+        if domain.startswith(".") or domain.endswith("."):
+            return False
+        if ".." in domain:
+            return False
+
+        return True
