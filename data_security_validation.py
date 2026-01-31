@@ -110,3 +110,56 @@ class SecureDataValidationExtractor:
         self.path_traversal_pattern = re.compile(
             r"\.\./|\.\.\\|/etc/passwd|/etc/shadow"
         )
+
+    def is_input_safe(self, text: str) -> bool:
+        """
+        Security validation: Check if input contains malicious patterns.
+
+        Args:
+            text: Input string to validate
+
+        Returns:
+            True if input appears safe, False if malicious patterns detected
+        """
+
+        # This will be called to other methods to check first 
+        # if there is not harmful scripts in it 
+        # before continuing with normal regex check to enhance security.
+
+        if self.sql_injection_pattern.search(text):
+            return False
+        elif self.xss_pattern.search(text):
+            return False
+        elif self.path_traversal_pattern.search(text):
+            return False
+        else:
+            return True
+
+    def sanitize_for_logging(self, text: str, data_type: str) -> str:
+        """
+        Sanitize sensitive data for safe logging.
+
+        Args:
+            text: Original text containing sensitive data
+            data_type: Type of sensitive data (e.g., 'credit_card', 'email')
+
+        Returns:
+            Safe version to prevent exposing sensitive info in logs and outputs.
+        """
+
+        # Prevents sensitive data exposure in logs
+        if data_type == "credit_card":
+            # Mask all but not last 4 digits example 1234-5678-9012-3456 -> ****-****-****-3456
+            return re.sub(r"\d", "*", text[:-4]) + text[-4:]
+        elif data_type == "email":
+            # Partial masking: user@domain.com -> u***@domain.com
+            parts = text.split("@")
+            if len(parts) == 2:
+                username = (
+                    parts[0][0] + "*" * (len(parts[0]) - 1)
+                    if len(parts[0]) > 1
+                    else parts[0]
+                )
+                return f"{username}@{parts[1]}"
+        else:
+            return text
