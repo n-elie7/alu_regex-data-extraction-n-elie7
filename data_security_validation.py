@@ -11,6 +11,8 @@ N.B: This thing is battle tested use different test inputs as you want.
 """
 
 import re
+from typing import Dict, List
+from collections import defaultdict
 
 class SecureDataValidationExtractor:
     """
@@ -439,3 +441,108 @@ class SecureDataValidationExtractor:
 
         return luhn_check(card_digits)
 
+    def validate_extract_data(self, text: str) -> Dict[str, List[str]]:
+        """
+        This function will extract all data from text input with validation checks.
+
+        Args:
+            text: Input text to process
+
+        Returns:
+            Dictionary mapping data types to lists of valid extracted values
+        """
+        results = defaultdict(list)
+        seen = defaultdict(set)
+
+        # below we will validate and then extract data from input text
+
+        # email section checking
+        # Also we have to mask emails to avoid sensitive data being leaked
+        for match in self.email_pattern.finditer(text):
+            email = match.group()
+            if self.validate_email(email) and email not in seen["emails"]:
+                masked_emails = self.sanitize_for_logging(email, "email")
+                results["emails"].append(masked_emails)
+                seen["emails"].add(email)
+
+        # urls section checking
+        for match in self.url_pattern.finditer(text):
+            url = match.group()
+            if self.validate_url(url) and url not in seen["urls"]:
+                results["urls"].append(url)
+                seen["urls"].add(url)
+
+        # Phone number section checking
+        for match in self.phone_pattern.finditer(text):
+            phone_number = match.group()
+            if self.validate_phone_number(phone_number) and phone_number not in seen["phones"]:
+                results["phones"].append(phone_number)
+                seen["phones"].add(phone_number)
+
+        # Credit card section checking
+        # Also we have to mask the card number to avoid sensitive data being leaked
+        for match in self.credit_card_pattern.finditer(text):
+            card_number = match.group()
+            if self.validate_credit_card(card_number) and card_number not in seen["credit_cards"]:
+                masked_card_numbers = self.sanitize_for_logging(card_number, "credit_card")
+                results["credit_cards"].append(masked_card_numbers)
+                seen["credit_cards"].add(card_number)
+
+        # Time section checking
+        for match in self.time_pattern.finditer(text):
+            time = match.group()
+            if self.validate_time_format(time) and time not in seen["times"]:
+                results["times"].append(time)
+                seen["times"].add(time)
+
+        # html tags section checking
+        for match in self.html_tag_pattern.finditer(text):
+            tag = match.group()
+            if self.validate_html_tag(tag) and tag not in seen["html_tags"]:
+                results["html_tags"].append(tag)
+                seen["html_tags"].add(tag)
+
+        # Hashtags section checking
+        for match in self.hashtag_pattern.finditer(text):
+            hashtag = match.group()
+            if self.validate_hashtag(hashtag) and hashtag not in seen["hashtags"]:
+                results["hashtags"].append(hashtag)
+                seen["hashtags"].add(hashtag)
+
+        # Currency amount section checking
+        for match in self.currency_pattern.finditer(text):
+            currency_amount = match.group()
+            if self.validate_amount_currency(currency_amount) and currency_amount not in seen["currency"]:
+                results["currency"].append(currency_amount)
+                seen["currency"].add(currency_amount)
+
+        return dict(results)
+    
+    def detect_threats_attacks(self, text: str) -> Dict[str, List[str]]:
+        """
+        This function will identify security threats in the input.
+
+        Args:
+            text: Input text to scan for threats
+
+        Returns:
+            Dictionary mapping threat types to detected threats
+        """
+        threats = defaultdict(list)
+
+        # SQL Injection attacks
+        sql_injection_matches = self.sql_injection_pattern.finditer(text)
+        for match in sql_injection_matches:
+            threats["sql_injection"].append(match.group().strip())
+
+        # XSS attacks
+        xss_matches = self.xss_pattern.finditer(text)
+        for match in xss_matches:
+            threats["xss_attempts"].append(match.group().strip())
+
+        # Path traversal attacks
+        path_matches = self.path_traversal_pattern.finditer(text)
+        for match in path_matches:
+            threats["path_traversal"].append(match.group().strip())
+
+        return dict(threats)
