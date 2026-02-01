@@ -188,3 +188,16 @@ Case Status: RESOLVED
 Resolution Time: 45 minutes
 Customer Satisfaction: 5/5 stars
 Follow-up Required: No
+
+Some metch Luhn algorithmic check other are filtered out
+
+4539 1488 0343 6467
+4012 8888 8888 1881
+5555 5555 5555 4444
+6011 0009 9013 9424
+3714 496353 98431
+4539 1488 0343 6466
+4012 8888 8888 1882
+5555 5555 5555 4440
+6011 0009 9013 9420
+3714 496353 98430

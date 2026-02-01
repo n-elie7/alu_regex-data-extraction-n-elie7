@@ -10,16 +10,18 @@ I'm using Object Oriented Programming style to keep things organized.
 N.B: This thing is battle tested use different test inputs as you want.
 """
 
+import json
 import re
 from typing import Dict, List
 from collections import defaultdict
+
 
 class SecureDataValidationExtractor:
     """
     A secure data extraction system that uses regex to identify and validate
     structured data patterns while defending against malicious input.
 
-    N.B: I have extended the project to also catch things like 
+    N.B: I have extended the project to also catch things like
     for example SQL injection patterns, XSS patterns, and also pattern traversal pattern
     which are also one of the most malicious techniques you don't want your system to face.
     """
@@ -82,12 +84,10 @@ class SecureDataValidationExtractor:
         # It validates proper decimal format (exactly 2 decimal places or none)
         self.currency_amount_pattern = re.compile(r"\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?\b")
 
-
         # Since this is project is for Security Validation
         # as Junior Frontend Developer I choose to add other security layer as you have seen
         # from the top in order to stand out.
         # I have added SQL injection, XSS checking, and Path traversal checking.
-
 
         # This match any common SQL Injection patterns
         # It matches either in upper or lower case as i had to ignore the case.
@@ -99,7 +99,7 @@ class SecureDataValidationExtractor:
 
         # XSS patterns
         # This will help the system the system to catch malicious script
-        # That can led to execution of javascript scripts in the user browser or any other clients he/she is using 
+        # That can led to execution of javascript scripts in the user browser or any other clients he/she is using
         self.xss_pattern = re.compile(
             r"<script|javascript:|onerror=|onload=|onclick=|<iframe|eval\(|document\.|window\.",
             re.IGNORECASE,
@@ -108,7 +108,7 @@ class SecureDataValidationExtractor:
         # Path traversal patterns
         # This will help the system to catch malcious inputs that's trying to traverse path,
         # And wants to gain unathorized access to some file and information so that system can
-        # find a way to stop it from happening. 
+        # find a way to stop it from happening.
         self.path_traversal_pattern = re.compile(
             r"\.\./|\.\.\\|/etc/passwd|/etc/shadow"
         )
@@ -124,8 +124,8 @@ class SecureDataValidationExtractor:
             True if input appears safe, False if malicious patterns detected
         """
 
-        # This will be called to other methods to check first 
-        # if there is not harmful scripts in it 
+        # This will be called to other methods to check first
+        # if there is not harmful scripts in it
         # before continuing with normal regex check to enhance security.
 
         if self.sql_injection_pattern.search(text):
@@ -165,7 +165,7 @@ class SecureDataValidationExtractor:
                 return f"{username}@{parts[1]}"
         else:
             return text
-        
+
     def validate_email(self, email: str) -> bool:
         """
         Additional validation for email addresses beyond regex.
@@ -177,14 +177,14 @@ class SecureDataValidationExtractor:
             True if email passes all validation checks
         """
 
-        # here i checked if email is available 
+        # here i checked if email is available
         # or not longer than 254 based on rules.
         if not email or len(email) > 254:
             return False
 
         # Check for malicious patterns security layer
         # for checking SQL injections, XSS, and Path traversal.
-        if not self.is_safe_input(email):
+        if not self.is_input_safe(email):
             return False
 
         # Split and validate parts
@@ -224,7 +224,7 @@ class SecureDataValidationExtractor:
             True if URL passes all validation checks
         """
 
-        # here i checked if url is available 
+        # here i checked if url is available
         # or not longer than 2048.
         # reasonable URL length limit
         if not url or len(url) > 2048:
@@ -232,14 +232,14 @@ class SecureDataValidationExtractor:
 
         # Block malicious protocols
         # that can cause security issues
-        # not all of them included but common ones 
+        # not all of them included but common ones
         malicious_protocols = ["javascript:", "data:", "file:", "vbscript:"]
         if any(url.lower().startswith(protocol) for protocol in malicious_protocols):
             return False
 
         # Check for malicious attempts in URL
-        # check the implementation of is_safe_input method above
-        if not self.is_safe_input(url):
+        # check the implementation of is_input_safe method above
+        if not self.is_input_safe(url):
             return False
 
         return True
@@ -264,12 +264,12 @@ class SecureDataValidationExtractor:
 
         # Check digit count 7-15 digits is reasonable for most phone numbers
         # across the globe minimum digits are 7-8 and maximum is 15
-        # source is google on the internet 
+        # source is google on the internet
         if len(digits_only) < 7 or len(digits_only) > 15:
             return False
 
         # This check for malicious patterns
-        if not self.is_safe_input(phone):
+        if not self.is_input_safe(phone):
             return False
 
         return True
@@ -288,9 +288,11 @@ class SecureDataValidationExtractor:
         # This checks if time_str if available
         if not time_str:
             return False
-        
+
         # Extract hours and minutes
-        time_format_match = re.match(r"(\d{1,2}):(\d{2})(?:\s?(AM|PM|am|pm))?", time_str)
+        time_format_match = re.match(
+            r"(\d{1,2}):(\d{2})(?:\s?(AM|PM|am|pm))?", time_str
+        )
         if not time_format_match:
             return False
 
@@ -324,7 +326,7 @@ class SecureDataValidationExtractor:
         """
 
         # This check for malicious inputs
-        if not self.is_safe_input(tag):
+        if not self.is_input_safe(tag):
             return False
 
         # Check for dangerous tags
@@ -355,7 +357,7 @@ class SecureDataValidationExtractor:
             return False
 
         # This will check for malicious patterns in the input
-        if not self.is_safe_input(hashtag):
+        if not self.is_input_safe(hashtag):
             return False
 
         # reasonable length check not longest ones
@@ -378,7 +380,7 @@ class SecureDataValidationExtractor:
         # made sure if amount input is there
         if not amount:
             return False
-        
+
         # Remove $ and commas to get number
         clean_amount = amount.replace("$", "").replace(",", "")
 
@@ -392,7 +394,7 @@ class SecureDataValidationExtractor:
             return False
 
         # Check for malicious inputs
-        if not self.is_safe_input(amount):
+        if not self.is_input_safe(amount):
             return False
 
         return True
@@ -412,7 +414,7 @@ class SecureDataValidationExtractor:
         card_digits = re.sub(r"\D", "", card_number)
 
         # it checks length 13-19 card_digits for valid cards
-        # based on type of card but we must be inclusive for reliable system 
+        # based on type of card but we must be inclusive for reliable system
         if len(card_digits) < 13 or len(card_digits) > 19:
             return False
 
@@ -473,9 +475,12 @@ class SecureDataValidationExtractor:
                 seen["urls"].add(url)
 
         # Phone number section checking
-        for match in self.phone_pattern.finditer(text):
+        for match in self.phone_number_pattern.finditer(text):
             phone_number = match.group()
-            if self.validate_phone_number(phone_number) and phone_number not in seen["phones"]:
+            if (
+                self.validate_phone_number(phone_number)
+                and phone_number not in seen["phones"]
+            ):
                 results["phones"].append(phone_number)
                 seen["phones"].add(phone_number)
 
@@ -483,8 +488,13 @@ class SecureDataValidationExtractor:
         # Also we have to mask the card number to avoid sensitive data being leaked
         for match in self.credit_card_pattern.finditer(text):
             card_number = match.group()
-            if self.validate_credit_card(card_number) and card_number not in seen["credit_cards"]:
-                masked_card_numbers = self.sanitize_for_logging(card_number, "credit_card")
+            if (
+                self.validate_credit_card(card_number)
+                and card_number not in seen["credit_cards"]
+            ):
+                masked_card_numbers = self.sanitize_for_logging(
+                    card_number, "credit_card"
+                )
                 results["credit_cards"].append(masked_card_numbers)
                 seen["credit_cards"].add(card_number)
 
@@ -510,14 +520,17 @@ class SecureDataValidationExtractor:
                 seen["hashtags"].add(hashtag)
 
         # Currency amount section checking
-        for match in self.currency_pattern.finditer(text):
+        for match in self.currency_amount_pattern.finditer(text):
             currency_amount = match.group()
-            if self.validate_amount_currency(currency_amount) and currency_amount not in seen["currency"]:
+            if (
+                self.validate_amount_currency(currency_amount)
+                and currency_amount not in seen["currency"]
+            ):
                 results["currency"].append(currency_amount)
                 seen["currency"].add(currency_amount)
 
         return dict(results)
-    
+
     def detect_threats_attacks(self, text: str) -> Dict[str, List[str]]:
         """
         This function will identify security threats in the input.
@@ -546,3 +559,61 @@ class SecureDataValidationExtractor:
             threats["path_traversal"].append(match.group().strip())
 
         return dict(threats)
+
+
+def main():
+    """Entry point of the system."""
+
+    print("=============================")
+    print("SECURE DATA EXTRACTION SYSTEM")
+    print("=============================")
+    print()
+
+    # specify name of input file used
+    input_file = "test_input.txt"
+
+    try:
+        with open(input_file, "r", encoding="utf-8") as f:
+            text = f.read()
+
+        print(f"Successfully read test input from {input_file}")
+        print()
+
+        # Initialize extractor
+        extractor = SecureDataValidationExtractor()
+
+        # Extract data
+        print("Processing data extraction...")
+        extracted_data = extractor.validate_extract_data(text)
+
+        # Detect threats
+        print("Scanning for security threats...")
+        threats = extractor.detect_threats_attacks(text)
+
+        # save as JSON for structured output
+        json_output = {
+            "extracted_data": extracted_data,
+            "security_threats": threats,
+            "summary": {
+                "total_patterns_found": sum(len(v) for v in extracted_data.values()),
+                "threats_detected": sum(len(v) for v in threats.values()),
+            },
+        }
+
+        json_file = "valid_results_extracted.json"
+        with open(json_file, "w", encoding="utf-8") as f:
+            json.dump(json_output, f, indent=2)
+
+        print()
+        print(f"JSON results saved to {json_file}")
+        print()
+
+    except FileNotFoundError:
+        print(f"Error: Could not find {input_file}")
+        print("Please ensure the file exists in the current directory.")
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+if __name__ == "__main__":
+    main()
